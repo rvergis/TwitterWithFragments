@@ -1,6 +1,5 @@
 package com.codepath.apps.twitterclient.models;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import android.util.Log;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.codepath.apps.twitterclient.TweetUtils;
@@ -24,12 +24,12 @@ import com.codepath.apps.twitterclient.TwitterClient;
  * 
  */
 @Table(name = "tweets")
-public class TweetModel extends Model {
+public class TweetModel extends Model implements IUid {
 	// Define table fields
 	@Column(name = "body")
 	private String body;
 	
-	@Column(name = "uid", index=true)
+	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.REPLACE)
 	private long uid;
 	
 	@Column(name = "createdAt")
@@ -90,15 +90,18 @@ public class TweetModel extends Model {
 	}
 	
 	public static TweetModel fromJSON(JSONObject jsonObject) throws JSONException {
-		TweetModel tweet = new TweetModel(
-											jsonObject.getString("text"), 									// body
-											jsonObject.getLong("id"), 										// uid
-											TweetUtils.parseTweetJSONDate(jsonObject.getString("created_at")), 	// uid
-											jsonObject.getBoolean("favorited"),								// favorited
-											jsonObject.getBoolean("retweeted"),								// retweeted
-											UserModel.fromJSON(jsonObject.getJSONObject("user"))			// User
-											);
-        return tweet;
+		TweetModel model = TweetModel.byUid(jsonObject.getLong("id"));
+		if (model == null) {
+			model = new TweetModel(
+					jsonObject.getString("text"), 									// body
+					jsonObject.getLong("id"), 										// uid
+					TweetUtils.parseTweetJSONDate(jsonObject.getString("created_at")), 	// uid
+					jsonObject.getBoolean("favorited"),								// favorited
+					jsonObject.getBoolean("retweeted"),								// retweeted
+					UserModel.fromJSON(jsonObject.getJSONObject("user"))			// User
+					);
+		}
+        return model;
 	}
 
 	public static List<TweetModel> fromJson(JSONArray jsonTweets) {
@@ -122,7 +125,11 @@ public class TweetModel extends Model {
 	   return new Select().from(TweetModel.class).where("id = ?", id).executeSingle();
 	}
 	
+	public static TweetModel byUid(long uid) {
+	   return new Select().from(TweetModel.class).where("uid = ?", uid).executeSingle();
+	}
+	
 	public static List<TweetModel> recentItems() {
-      return new Select().from(TweetModel.class).orderBy("id DESC").limit("300").execute();
+      return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit("300").execute();
 	}
 }

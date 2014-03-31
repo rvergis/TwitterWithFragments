@@ -12,6 +12,7 @@ import android.util.Log;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.query.Select;
 import com.codepath.apps.twitterclient.TwitterClient;
 
@@ -22,12 +23,12 @@ import com.codepath.apps.twitterclient.TwitterClient;
  * 
  */
 @Table(name = "users")
-public class UserModel extends Model {
+public class UserModel extends Model implements IUid {
 	// Define table fields
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "uid", index=true)
+	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.REPLACE)
 	private long uid;
 	
 	@Column(name = "screenName")
@@ -105,23 +106,29 @@ public class UserModel extends Model {
 	   return new Select().from(UserModel.class).where("id = ?", id).executeSingle();
 	}
 	
+	public static UserModel byUid(long uid) {
+	   return new Select().from(UserModel.class).where("uid = ?", uid).executeSingle();
+	}
+	
 	public static List<UserModel> recentItems() {
       return new Select().from(UserModel.class).orderBy("id DESC").limit("300").execute();
 	}
 	
 	public static UserModel fromJSON(JSONObject jsonObject) throws JSONException {
-		UserModel tweet = new UserModel(
-											jsonObject.getString("name"), 							// name
-											jsonObject.getLong("id"), 								// uid
-											jsonObject.getString("screen_name"), 					// screenName
-											jsonObject.getString("profile_background_image_url"), 	// profileBgImageUrl
-											jsonObject.getString("profile_image_url"), 				// profileImageUrl
-											jsonObject.getInt("statuses_count"), 					// num_tweets
-											jsonObject.getInt("followers_count"), 					// followersCount
-											jsonObject.getInt("friends_count") 						// friendsCount
-											);
-		
-        return tweet;
+		UserModel model = UserModel.byUid(jsonObject.getLong("id"));
+		if (model == null) {
+			model = new UserModel(
+					jsonObject.getString("name"), 							// name
+					jsonObject.getLong("id"), 								// uid
+					jsonObject.getString("screen_name"), 					// screenName
+					jsonObject.getString("profile_background_image_url"), 	// profileBgImageUrl
+					jsonObject.getString("profile_image_url"), 				// profileImageUrl
+					jsonObject.getInt("statuses_count"), 					// num_tweets
+					jsonObject.getInt("followers_count"), 					// followersCount
+					jsonObject.getInt("friends_count") 						// friendsCount
+					);			
+		}		
+        return model;
 	}
 
 	public static List<UserModel> fromJson(JSONArray jsonArray) {
