@@ -8,7 +8,7 @@
     <string name="login_label">Log in</string>
     <string name="title_activity_timeline">Timeline</string>
     
-    <string name="composeTweetHint">In 140 characters or less, tell us what you ate</string>
+    <string name="composeTweetHint">In 140 characters or less, tell us what you ate, or link us to pictures of your feet (or tweet something equally useless)</string>
     <string name="compose_new">New Tweet</string>
     
     <string name="tweetImageView">Tweet Image View</string>

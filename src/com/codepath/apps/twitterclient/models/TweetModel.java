@@ -134,12 +134,15 @@ public class TweetModel extends Model implements IUid {
 	public static Long maxUid() {
 		TweetModel model = (TweetModel) new Select().from(TweetModel.class).orderBy("uid ASC").executeSingle();
 		if (model != null) {
-			return model.getUid();			
+			return (model.getUid() - 1L);			
 		}
 		return null;
 	}
 	
-	public static List<TweetModel> recentItems(long maxLimit) {
-      return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
+	public static List<TweetModel> recentItems(Long maxUid, long maxLimit) {
+		if (maxUid != null) {
+			return new Select().from(TweetModel.class).where("uid < ?", maxUid.longValue()).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
+		}
+		return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 	}
 }

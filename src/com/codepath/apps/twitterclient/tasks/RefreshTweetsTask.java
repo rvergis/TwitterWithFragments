@@ -27,10 +27,10 @@ public class RefreshTweetsTask extends AsyncTask<Void, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		Long max_id = TweetModel.maxUid();
+		final Long maxUid = TweetModel.maxUid();
 		if (!loading) {
 			loading = true;
-			TwitterClientApp.getRestClient().getHomeTimeline(max_id, REFRESH_COUNT, new JsonHttpResponseHandler() {
+			TwitterClientApp.getRestClient().getHomeTimeline(maxUid, REFRESH_COUNT, new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(JSONArray jsonTweets) {
 					lock.lock();
@@ -61,7 +61,7 @@ public class RefreshTweetsTask extends AsyncTask<Void, Void, Void> {
 						lock.unlock();
 						ActiveAndroid.endTransaction();
 					}						
-					TweetsAdapter.instance.updateView();
+					TweetsAdapter.instance.updateView(maxUid);
 				}
 				
 				@Override

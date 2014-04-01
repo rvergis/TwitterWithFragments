@@ -58,7 +58,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		return view;
 	}
 	
-	public void updateView() {	
+	public void updateView(final Long maxUid) {	
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
@@ -66,7 +66,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 
 				@Override
 				public void run() {
-					addAll(TweetModel.recentItems(RefreshTweetsTask.REFRESH_COUNT));
+					addAll(TweetModel.recentItems(maxUid, RefreshTweetsTask.REFRESH_COUNT));
 					notifyDataSetChanged();			
 				}
 				
