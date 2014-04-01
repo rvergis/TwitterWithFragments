@@ -132,7 +132,7 @@ public class TweetModel extends Model implements IUid {
 	}
 	
 	public static Long maxUid() {
-		TweetModel model = (TweetModel) new Select().from(TweetModel.class).orderBy("uid DESC").executeSingle();
+		TweetModel model = (TweetModel) new Select().from(TweetModel.class).orderBy("uid ASC").executeSingle();
 		if (model != null) {
 			return model.getUid();			
 		}
