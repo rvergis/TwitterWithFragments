@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.codepath.apps.twitterclient.models.TweetModel;
 import com.codepath.apps.twitterclient.models.UserModel;
+import com.codepath.apps.twitterclient.tasks.RefreshTweetsTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.Activity;
@@ -65,8 +66,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 
 				@Override
 				public void run() {
-					clear();
-					addAll(TweetModel.recentItems());
+					addAll(TweetModel.recentItems(RefreshTweetsTask.REFRESH_COUNT));
 					notifyDataSetChanged();			
 				}
 				

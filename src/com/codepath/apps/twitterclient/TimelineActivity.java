@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,11 +30,23 @@ public class TimelineActivity extends Activity {
 		TweetsAdapter adapter = new TweetsAdapter(this, tweets);
 		lvTweets.setAdapter(adapter);
 		
-		adapter.clear();
-		adapter.addAll(TweetModel.recentItems());		
-		adapter.notifyDataSetChanged();
+		lvTweets.setOnScrollListener(new AbsListView.OnScrollListener() {
+			
+			static final int THRESHOLD_COUNT = 3;
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {				
+				if (firstVisibleItem + visibleItemCount + THRESHOLD_COUNT >= totalItemCount) {
+					new RefreshTweetsTask().execute();						
+				}
+			}
+		});
 		
-		new RefreshTweetsTask().execute();
 	}	
 
 	@Override

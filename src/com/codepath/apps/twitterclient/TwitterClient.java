@@ -29,15 +29,27 @@ public class TwitterClient extends OAuthBaseClient {
     public static final String REST_CALLBACK_URL = "oauth://rvergis1"; // Change this (here and in manifest)
     
     public static final String LOG_NAME = TwitterClient.class.getSimpleName();
-    
-    
+        
     public TwitterClient(Context context) {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
     
-    public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(Long max_id, Long count, AsyncHttpResponseHandler handler) {
     	String url = getApiUrl("/statuses/home_timeline.json");
-    	client.get(url, null, handler);    	
+    	RequestParams params = null;
+    	if (max_id != null) {
+    		if (params == null) {
+    			params = new RequestParams();
+    		}
+        	params.put("max_id", Long.toString(max_id));    		
+    	}
+    	if (count != null) {
+    		if (params == null) {
+    			params = new RequestParams();
+    		}
+    		params.put("count", Long.toString(count));
+    	}
+    	client.get(url, params, handler);    	
     }
     
     public void postTweet(String tweet, AsyncHttpResponseHandler handler) {

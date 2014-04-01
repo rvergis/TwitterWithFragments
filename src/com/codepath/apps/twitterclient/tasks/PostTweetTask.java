@@ -23,25 +23,25 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 			@Override
 			public void onSuccess(int statusCode, JSONObject arg1) {
 				new RefreshTweetsTask().execute();
-				Toast.makeText(context, "TwitterBird reached its destination", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "TwitterBird reached safely", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
 			public void onSuccess(int statusCode, JSONArray arg1) {
 				new RefreshTweetsTask().execute();
-				Toast.makeText(context, "TwitterBird reached its destination", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "TwitterBird reached safely", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
 			public void onFailure(Throwable e) {
 				Log.e(TwitterClient.LOG_NAME, "Unable to post", e);
-				Toast.makeText(context, "Unable to post", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "TwitterBird shot down. Call PETA.", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
 			public void onFailure(Throwable e, JSONObject arg1) {
 				Log.e(TwitterClient.LOG_NAME, "Unable to post", e);
-				Toast.makeText(context, "Unable to post", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "TwitterBird shot down. Call PETA.", Toast.LENGTH_SHORT).show();
 			}
 			
 		});
