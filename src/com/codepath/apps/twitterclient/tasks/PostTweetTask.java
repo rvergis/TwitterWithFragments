@@ -3,27 +3,45 @@ package com.codepath.apps.twitterclient.tasks;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.TwitterClientApp;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
-public class PostTweetTask extends AsyncTask<String, Void, Void> {
+public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 
 	@Override
-	protected Void doInBackground(String... params) {
-		String tweet = params[0];
+	protected Void doInBackground(final Object... params) {
+		final String tweet = (String) params[0];
+		final Context context = (Context) params[1];
 		TwitterClientApp.getRestClient().postTweet(tweet, new JsonHttpResponseHandler() {
+			
 			@Override
-			public void onSuccess(int arg0, JSONArray arg1) {
+			public void onSuccess(int statusCode, JSONObject arg1) {
+				new RefreshTweetsTask().execute();
+				Toast.makeText(context, "TwitterBird reached its destination", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
-			public void onFailure(Throwable arg0) {
+			public void onSuccess(int statusCode, JSONArray arg1) {
+				new RefreshTweetsTask().execute();
+				Toast.makeText(context, "TwitterBird reached its destination", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
-			public void onFailure(Throwable arg0, JSONObject arg1) {
+			public void onFailure(Throwable e) {
+				Log.e(TwitterClient.LOG_NAME, "Unable to post", e);
+				Toast.makeText(context, "Unable to post", Toast.LENGTH_SHORT).show();
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject arg1) {
+				Log.e(TwitterClient.LOG_NAME, "Unable to post", e);
+				Toast.makeText(context, "Unable to post", Toast.LENGTH_SHORT).show();
 			}
 			
 		});

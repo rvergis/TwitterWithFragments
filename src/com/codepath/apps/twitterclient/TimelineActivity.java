@@ -69,6 +69,6 @@ public class TimelineActivity extends Activity {
 	}
 	
 	private void postToTwitter(String tweet) {
-		new PostTweetTask().execute(tweet);
+		new PostTweetTask().execute(tweet, this);
 	}
 }
