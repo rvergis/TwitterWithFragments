@@ -58,6 +58,21 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		return view;
 	}
 	
+	public void clearView() {
+		Context context = getContext();
+		if (context instanceof Activity) {
+			Activity activity = (Activity) getContext();
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					clear();
+				}
+				
+			});
+		}
+	}
+	
 	public void updateView(final Long maxUid) {	
 		Context context = getContext();
 		if (context instanceof Activity) {

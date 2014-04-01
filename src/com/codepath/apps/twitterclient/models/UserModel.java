@@ -151,6 +151,23 @@ public class UserModel extends Model implements IUid {
 		}
 		return tweets;
 	}
-		
+	
+	public static void save(JSONObject jsonObject) {
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.put(jsonObject);
+		save(jsonArray);
+	}
+	
+	public static void save(JSONArray jsonArray) {
+		Map<Long, UserModel> users = UserModel.fromJson(jsonArray);
+		if (users != null && !users.isEmpty()) {
+			for (UserModel user : users.values()) {
+				if (UserModel.byUid(user.getUid()) == null) {
+					user.save();
+				}
+			}
+		}
+
+	}
 	
 }

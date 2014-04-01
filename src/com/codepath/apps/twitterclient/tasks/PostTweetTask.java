@@ -3,8 +3,11 @@ package com.codepath.apps.twitterclient.tasks;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.codepath.apps.twitterclient.TweetsAdapter;
 import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.TwitterClientApp;
+import com.codepath.apps.twitterclient.models.TweetModel;
+import com.codepath.apps.twitterclient.models.UserModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.content.Context;
@@ -21,14 +24,20 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 		TwitterClientApp.getRestClient().postTweet(tweet, new JsonHttpResponseHandler() {
 			
 			@Override
-			public void onSuccess(int statusCode, JSONObject arg1) {
-				new RefreshTweetsTask().execute();
+			public void onSuccess(int statusCode, JSONObject jsonObject) {
+				UserModel.save(jsonObject);
+				TweetModel.save(jsonObject);				
+				TweetsAdapter.instance.clearView();
+				TweetsAdapter.instance.updateView(null);
 				Toast.makeText(context, "TwitterBird reached safely", Toast.LENGTH_SHORT).show();
 			}
 			
 			@Override
-			public void onSuccess(int statusCode, JSONArray arg1) {
-				new RefreshTweetsTask().execute();
+			public void onSuccess(int statusCode, JSONArray jsonArray) {
+				UserModel.save(jsonArray);
+				TweetModel.save(jsonArray);
+				TweetsAdapter.instance.clearView();
+				TweetsAdapter.instance.updateView(null);
 				Toast.makeText(context, "TwitterBird reached safely", Toast.LENGTH_SHORT).show();
 			}
 			

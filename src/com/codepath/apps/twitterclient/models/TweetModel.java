@@ -145,4 +145,22 @@ public class TweetModel extends Model implements IUid {
 		}
 		return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 	}
+	
+	public static void save(JSONObject jsonObject) {
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.put(jsonObject);
+		save(jsonArray);
+	}
+	
+	public static void save(JSONArray jsonArray) {
+		Map<Long, TweetModel> tweets = TweetModel.fromJson(jsonArray);
+		if (tweets != null && !tweets.isEmpty()) {
+			for (TweetModel tweet : tweets.values()) {
+				if (TweetModel.byUid(tweet.getUid()) == null) {
+					tweet.save();
+					
+				}
+			}	
+		}
+	}
 }

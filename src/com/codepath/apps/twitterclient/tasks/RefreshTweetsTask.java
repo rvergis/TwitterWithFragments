@@ -36,23 +36,8 @@ public class RefreshTweetsTask extends AsyncTask<Void, Void, Void> {
 					lock.lock();
 					ActiveAndroid.beginTransaction();
 					try {
-						Map<Long, UserModel> users = UserModel.fromJson(jsonTweets);
-						if (users != null && !users.isEmpty()) {
-							for (UserModel user : users.values()) {
-								if (UserModel.byUid(user.getUid()) == null) {
-									user.save();
-								}
-							}
-						}
-						Map<Long, TweetModel> tweets = TweetModel.fromJson(jsonTweets);
-						if (tweets != null && !tweets.isEmpty()) {
-							for (TweetModel tweet : tweets.values()) {
-								if (TweetModel.byUid(tweet.getUid()) == null) {
-									tweet.save();
-									
-								}
-							}	
-						}
+						UserModel.save(jsonTweets);
+						TweetModel.save(jsonTweets);
 						ActiveAndroid.setTransactionSuccessful();
 					} catch(Throwable t) {
 						Log.e(TwitterClient.LOG_NAME, "refresh tweet", t);
