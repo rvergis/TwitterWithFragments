@@ -1,7 +1,8 @@
 package com.codepath.apps.twitterclient.models;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,7 @@ public class TweetModel extends Model implements IUid {
 	@Column(name = "body")
 	private String body;
 	
-	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.REPLACE)
+	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.IGNORE)
 	private long uid;
 	
 	@Column(name = "createdAt")
@@ -42,23 +43,27 @@ public class TweetModel extends Model implements IUid {
 	private boolean retweeted;
 	
 	@Column(name = "user")
-	private UserModel user;
+	private long userUid;
 	
 	public TweetModel() {
 		super();
 	}
 	
 	public TweetModel(String body, long uid, long createdAt, boolean favorited,
-			boolean retweeted, UserModel user) {
+			boolean retweeted, long userUid) {
 		super();
 		this.body = body;
 		this.uid = uid;
 		this.createdAt = createdAt;
 		this.favorited = favorited;
 		this.retweeted = retweeted;
-		this.user = user;
+		this.userUid = userUid;
 	}
 
+	@Override
+	public String toString() {
+		return Long.toString(uid);
+	}
 
 	// Getters
 	public String getName() {
@@ -85,33 +90,30 @@ public class TweetModel extends Model implements IUid {
 		return retweeted;
 	}
 
-	public UserModel getUser() {
-		return user;
+	public long getUserUid() {
+		return userUid;
 	}
 	
 	public static TweetModel fromJSON(JSONObject jsonObject) throws JSONException {
-		TweetModel model = TweetModel.byUid(jsonObject.getLong("id"));
-		if (model == null) {
-			model = new TweetModel(
-					jsonObject.getString("text"), 									// body
-					jsonObject.getLong("id"), 										// uid
-					TweetUtils.parseTweetJSONDate(jsonObject.getString("created_at")), 	// uid
-					jsonObject.getBoolean("favorited"),								// favorited
-					jsonObject.getBoolean("retweeted"),								// retweeted
-					UserModel.fromJSON(jsonObject.getJSONObject("user"))			// User
-					);
-		}
+		TweetModel model = new TweetModel(
+				jsonObject.getString("text"), 									// body
+				jsonObject.getLong("id"), 										// uid
+				TweetUtils.parseTweetJSONDate(jsonObject.getString("created_at")), 	// uid
+				jsonObject.getBoolean("favorited"),								// favorited
+				jsonObject.getBoolean("retweeted"),								// retweeted
+				UserModel.fromJSON(jsonObject.getJSONObject("user")).getUid()	// User
+				);
         return model;
 	}
 
-	public static List<TweetModel> fromJson(JSONArray jsonTweets) {
-		List<TweetModel> tweets = new ArrayList<TweetModel>();
+	public static Map<Long, TweetModel> fromJson(JSONArray jsonTweets) {
+		Map<Long, TweetModel> tweets = new HashMap<Long, TweetModel>();
 		try {
 			int count = jsonTweets.length();
 			for (int i = 0; i < count; i++) {
 				JSONObject jsonTweet = (JSONObject) jsonTweets.get(i);
 				TweetModel tweet = TweetModel.fromJSON(jsonTweet);
-				tweets.add(tweet);
+				tweets.put(tweet.getUid(), tweet);					
 			}
 			Log.d("TwitterClient", jsonTweets.toString());					
 		} catch(JSONException e) {

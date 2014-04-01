@@ -3,11 +3,11 @@ package com.codepath.apps.twitterclient;
 import java.util.List;
 
 import com.codepath.apps.twitterclient.models.TweetModel;
+import com.codepath.apps.twitterclient.models.UserModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +37,14 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		}
 		
 		TweetModel tweet = getItem(position);
+		UserModel user = UserModel.byUid(tweet.getUserUid());
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
-		ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
+		ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), imageView);
 		
 		TextView nameView = (TextView) view.findViewById(R.id.tvName);
-		String formattedName = "<b>" + tweet.getUser().getName() + "</b>" + " <small><font color='#777777'>@" + 
-									tweet.getUser().getScreenName() + "</font></small>";
+		String formattedName = "<b>" + user.getName() + "</b>" + " <small><font color='#777777'>@" + 
+									user.getScreenName() + "</font></small>";
 		nameView.setText(Html.fromHtml(formattedName));
 		
 		TextView createdAtView = (TextView) view.findViewById(R.id.tvCreatedAt);

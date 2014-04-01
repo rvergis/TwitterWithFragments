@@ -50,7 +50,11 @@ public class TimelineActivity extends Activity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		postTweet(requestCode, resultCode, data.getStringExtra("tweet"));
+		if (requestCode == REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				postTweet(requestCode, resultCode, data.getStringExtra("tweet"));
+			}
+		}
 	}
 	
 	private void postTweet(int requestCode, int resultCode, final String tweet) {
@@ -65,6 +69,6 @@ public class TimelineActivity extends Activity {
 	}
 	
 	private void postToTwitter(String tweet) {
-//		new PostTweetTask().execute(tweet);
+		new PostTweetTask().execute(tweet);
 	}
 }

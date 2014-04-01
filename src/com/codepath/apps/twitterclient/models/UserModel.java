@@ -1,7 +1,8 @@
 package com.codepath.apps.twitterclient.models;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class UserModel extends Model implements IUid {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.REPLACE)
+	@Column(name = "uid", index=true, unique=true, onUniqueConflict=ConflictAction.IGNORE)
 	private long uid;
 	
 	@Column(name = "screenName")
@@ -67,6 +68,12 @@ public class UserModel extends Model implements IUid {
 		this.friendsCount = friendsCount;
 	}
 
+	
+
+	@Override
+	public String toString() {
+		return Long.toString(uid);
+	}
 
 	// Getters
 	public String getName() {
@@ -115,9 +122,7 @@ public class UserModel extends Model implements IUid {
 	}
 	
 	public static UserModel fromJSON(JSONObject jsonObject) throws JSONException {
-		UserModel model = UserModel.byUid(jsonObject.getLong("id"));
-		if (model == null) {
-			model = new UserModel(
+		UserModel model = new UserModel(
 					jsonObject.getString("name"), 							// name
 					jsonObject.getLong("id"), 								// uid
 					jsonObject.getString("screen_name"), 					// screenName
@@ -127,18 +132,18 @@ public class UserModel extends Model implements IUid {
 					jsonObject.getInt("followers_count"), 					// followersCount
 					jsonObject.getInt("friends_count") 						// friendsCount
 					);			
-		}		
         return model;
 	}
 
-	public static List<UserModel> fromJson(JSONArray jsonArray) {
-		List<UserModel> tweets = new ArrayList<UserModel>();
+	public static Map<Long, UserModel> fromJson(JSONArray jsonArray) {
+		Map<Long, UserModel> tweets = new HashMap<Long, UserModel>();
 		try {
 			int count = jsonArray.length();
 			for (int i = 0; i < count; i++) {
-				JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+				JSONObject parentJsonObject = (JSONObject) jsonArray.get(i);
+				JSONObject jsonObject = parentJsonObject.getJSONObject("user");
 				UserModel tweet = UserModel.fromJSON(jsonObject);
-				tweets.add(tweet);
+				tweets.put(tweet.getUid(), tweet);
 			}
 			Log.d(TwitterClient.LOG_NAME, jsonArray.toString());					
 		} catch(JSONException e) {
