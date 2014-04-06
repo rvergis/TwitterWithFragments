@@ -87,6 +87,7 @@ public class ComposeActivity extends Activity {
 	}
 	
 	public void onClickPressed(View b) {
+		b.setEnabled(false);
 		EditText et = (EditText) findViewById(R.id.etComposeView);
 		Intent intent = new Intent();
 		intent.putExtra("tweet", et.getText().toString());

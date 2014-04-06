@@ -2,6 +2,8 @@ package com.codepath.apps.twitterwithfragments.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.json.JSONArray;
 
@@ -15,6 +17,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class GetHomeTimelineTweetsTask extends AbstractGetTimelineTweetsTask {
 
+	private static final Lock lock = new ReentrantLock();
+	
 	protected static boolean loading = false;
 	
 	@Override
@@ -61,6 +65,11 @@ public class GetHomeTimelineTweetsTask extends AbstractGetTimelineTweetsTask {
 	@Override
 	protected void setLoading(boolean value) {
 		loading = value;
+	}
+
+	@Override
+	protected Lock getLock() {
+		return lock;
 	}	
 	
 }

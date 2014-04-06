@@ -78,7 +78,7 @@ public class TweetsAdapter extends ArrayAdapter<ITweetModel> {
 				@Override
 				public void run() {
 					clear();
-					new GetHomeTimelineTweetsTask().execute(TweetsAdapter.this);			
+					new GetHomeTimelineTweetsTask().execute(TweetsAdapter.this, null);			
 				}
 				
 			});

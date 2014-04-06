@@ -2,7 +2,6 @@ package com.codepath.apps.twitterwithfragments.tasks;
 
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.json.JSONArray;
 
@@ -16,8 +15,6 @@ import com.codepath.apps.twitterwithfragments.models.ITweetModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Void, Void> {
-	
-	private static final Lock lock = new ReentrantLock();
 	
 	@Override
 	protected Void doInBackground(Object... params) {
@@ -67,7 +64,7 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 			invoker.invoke(maxUid, TweetsAdapter.REFRESH_COUNT, userId, new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(JSONArray jsonTweets) {
-					lock.lock();
+					getLock().lock();
 					ActiveAndroid.beginTransaction();
 					try {
 						saveTweets(jsonTweets);
@@ -75,7 +72,7 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 					} catch(Throwable t) {
 						Log.e(TwitterClient.LOG_NAME, "refresh tweet", t);
 					} finally {
-						lock.unlock();
+						getLock().unlock();
 						ActiveAndroid.endTransaction();
 					}
 					if (adapter != null) {
@@ -103,6 +100,8 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 		}
 
 	}
+	
+	protected abstract Lock getLock();
 	
 	protected abstract boolean isLoading();
 	
