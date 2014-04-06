@@ -1,46 +1,13 @@
 package com.codepath.apps.twitterwithfragments.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.AsyncTask;
 
-import com.codepath.apps.twitterwithfragments.R;
-import com.codepath.apps.twitterwithfragments.TweetsAdapter;
-import com.codepath.apps.twitterwithfragments.models.TweetModel;
+import com.codepath.apps.twitterwithfragments.tasks.GetMentionsTimelineTweetsTask;
 
-import android.os.Bundle;
-import android.widget.AbsListView;
-import android.widget.ListView;
-
-public class HomeTimelineFragment extends TweetsListFragment {
+public class HomeTimelineFragment extends AbstractTimelineFragment {
 	
-	TweetsAdapter adapter;
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onActivityCreated(savedInstanceState);		
-		List<TweetModel> tweets = new ArrayList<TweetModel>();
-		adapter = new TweetsAdapter(getActivity(), tweets);
-		ListView lvTweets = (ListView) getActivity().findViewById(R.id.lvTweets);
-		lvTweets.setAdapter(adapter);		
-		lvTweets.setOnScrollListener(new AbsListView.OnScrollListener() {			
-			static final int THRESHOLD_COUNT = 3;			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {				
-				if (firstVisibleItem + visibleItemCount + THRESHOLD_COUNT >= totalItemCount) {
-					adapter.updateTweetsView();						
-				}
-			}
-		});	
-		
-	}
-	
-	public TweetsAdapter getAdapter() {
-		return adapter;
+	public AsyncTask<Object, Void, Void> createAsyncTask() {
+		return new GetMentionsTimelineTweetsTask();
 	}
 
 }

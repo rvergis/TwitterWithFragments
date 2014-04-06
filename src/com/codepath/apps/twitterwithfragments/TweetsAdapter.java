@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.codepath.apps.twitterwithfragments.models.TweetModel;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
-import com.codepath.apps.twitterwithfragments.tasks.GetHomelineTweetsTask;
+import com.codepath.apps.twitterwithfragments.tasks.GetHomeTimelineTweetsTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,21 +85,21 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 				@Override
 				public void run() {
 					clear();
-					new GetHomelineTweetsTask().execute(TweetsAdapter.this);			
+					new GetHomeTimelineTweetsTask().execute(TweetsAdapter.this);			
 				}
 				
 			});
 		}
 	}
 	
-	public void updateTweetsView() {
+	public void updateTweetsView(final AsyncTask<Object, Void, Void> asyncTask) {
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
 			activity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					new GetHomelineTweetsTask().execute(TweetsAdapter.this);			
+					asyncTask.execute(TweetsAdapter.this);			
 				}
 				
 			});

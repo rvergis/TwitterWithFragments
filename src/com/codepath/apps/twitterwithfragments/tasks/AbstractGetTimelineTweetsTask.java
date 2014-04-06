@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import com.activeandroid.ActiveAndroid;
 import com.codepath.apps.twitterwithfragments.TweetsAdapter;
 import com.codepath.apps.twitterwithfragments.TwitterClient;
-import com.codepath.apps.twitterwithfragments.TwitterClientApp;
 import com.codepath.apps.twitterwithfragments.models.TweetModel;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -17,7 +16,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
+public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Void, Void> {
 	
 	private static final Lock lock = new ReentrantLock();
 	
@@ -25,7 +24,7 @@ public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Object... params) {
-		final TweetsAdapter adapter = (TweetsAdapter) params[0];		
+		final TweetsAdapter adapter = (TweetsAdapter) params[0];
 		Long maxUid = null;
 		if (adapter.getCount() > 0) {
 			TweetModel model = adapter.getItem(adapter.getCount() - 1);
@@ -40,7 +39,7 @@ public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
 		if (dbItems != null) {
 			if (dbItems.size() != TweetsAdapter.REFRESH_COUNT) {
 				// invoke the rest service
-				invokeRestService(adapter, maxUid);
+				invokeRestService(adapter, maxUid, createRestClientInvoker());
 			} else {
 				updateView(adapter, dbItems);
 			}			
@@ -63,11 +62,11 @@ public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
 		}
 	}
 	
-	private void invokeRestService(final TweetsAdapter adapter, final Long viewMaxUid) {
+	private void invokeRestService(final TweetsAdapter adapter, final Long viewMaxUid, final IRestClientInvoker invoker) {
 		if (!loading) {
 			loading = true;
 			final Long maxUid = ((TweetModel.maxUid() == null) ? null : (TweetModel.maxUid()));
-			TwitterClientApp.getRestClient().getHomeTimeline(maxUid, TweetsAdapter.REFRESH_COUNT, new JsonHttpResponseHandler() {
+			invoker.invoke(maxUid, TweetsAdapter.REFRESH_COUNT, new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(JSONArray jsonTweets) {
 					lock.lock();
@@ -107,5 +106,11 @@ public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
 		}
 
 	}
-
+	
+	protected abstract IRestClientInvoker createRestClientInvoker();
+	
+	public static interface IRestClientInvoker {
+		public void invoke(Long maxId, long refreshCount, JsonHttpResponseHandler handler);		
+	}
+	
 }
