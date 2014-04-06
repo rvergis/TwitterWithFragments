@@ -76,7 +76,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		}
 	}
 	
-	public void refreshView() {
+	public void refreshTweetsView() {
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
@@ -91,7 +91,21 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		}
 	}
 	
-	public void updateView(final List<TweetModel> listItems) {	
+	public void updateTweetsView() {
+		Context context = getContext();
+		if (context instanceof Activity) {
+			Activity activity = (Activity) getContext();
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					new GetHomelineTweetsTask().execute(TweetsAdapter.this);			
+				}
+				
+			});
+		}
+	}
+	
+	public void addTweetsToView(final List<TweetModel> listItems) {	
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();

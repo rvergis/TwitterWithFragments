@@ -11,7 +11,6 @@ import com.codepath.apps.twitterwithfragments.models.UserModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,7 +29,7 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 				try {
 					UserModel.save(jsonObject);
 					TweetModel.save(jsonObject);				
-					adapter.refreshView();		
+					adapter.refreshTweetsView();		
 					
 					activity.runOnUiThread(new Runnable() {
 						@Override
@@ -50,7 +49,7 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 				try {
 					UserModel.save(jsonArray);
 					TweetModel.save(jsonArray);
-					adapter.refreshView();
+					adapter.refreshTweetsView();
 					
 					activity.runOnUiThread(new Runnable() {
 						@Override

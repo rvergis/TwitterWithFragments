@@ -6,7 +6,6 @@ import java.util.List;
 import com.codepath.apps.twitterwithfragments.R;
 import com.codepath.apps.twitterwithfragments.TweetsAdapter;
 import com.codepath.apps.twitterwithfragments.models.TweetModel;
-import com.codepath.apps.twitterwithfragments.tasks.GetHomelineTweetsTask;
 
 import android.os.Bundle;
 import android.widget.AbsListView;
@@ -33,7 +32,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {				
 				if (firstVisibleItem + visibleItemCount + THRESHOLD_COUNT >= totalItemCount) {
-					new GetHomelineTweetsTask().execute(adapter);						
+					adapter.updateTweetsView();						
 				}
 			}
 		});	

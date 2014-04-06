@@ -47,7 +47,9 @@ public class TweetUtils {
 		Date now = new Date();
 		Date then = new Date(dateTime);
 		Date diff = new Date(now.getTime() - then.getTime());
-		long secs = diff.getTime() / MILLISECS_IN_1_SEC;
+		
+		// handle any slight discrepancy between Twitter time servers and this client
+		long secs = Math.max(diff.getTime() / MILLISECS_IN_1_SEC, 0);
 		if (secs < SECS_IN_1_MIN) {
 			friendlyName = "around " + pluralize(secs, "second");
 		} else if (secs < SECS_IN_1_HOUR) {

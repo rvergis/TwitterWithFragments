@@ -54,7 +54,7 @@ public class GetHomelineTweetsTask extends AsyncTask<Object, Void, Void> {
 	protected void updateView(TweetsAdapter adapter, List<TweetModel> dbItems) {
 		if (dbItems != null) {
 			if (adapter != null) {
-				adapter.updateView(dbItems);																	
+				adapter.addTweetsToView(dbItems);																	
 			} else {
 				Log.e(TwitterClient.LOG_NAME, "got a null adapter");
 			}
