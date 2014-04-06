@@ -22,15 +22,8 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 
 	public static long REFRESH_COUNT = 25L;
 
-	public static TweetsAdapter instance = null; 
-	
 	public TweetsAdapter(Context context, List<TweetModel> tweets) {
 		super(context, 0, tweets);
-		
-		if (instance != null) {
-			throw new IllegalStateException();
-		}
-		TweetsAdapter.instance = this;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
