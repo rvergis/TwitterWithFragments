@@ -33,10 +33,14 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.timeline, menu);
 		return true;
+	}
+	
+	public void onProfileViewPressed(MenuItem mi) {
+		Intent intent = new Intent(this, ProfileActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onComposeNewPressed(MenuItem mi) {

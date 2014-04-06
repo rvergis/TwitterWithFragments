@@ -24,7 +24,7 @@ import com.codepath.apps.twitterwithfragments.TwitterClient;
  * 
  */
 @Table(name = "users")
-public class UserModel extends Model implements IUid {
+public class UserModel extends Model {
 	// Define table fields
 	@Column(name = "name")
 	private String name;

@@ -3,7 +3,14 @@
     tools:context="com.codepath.apps.twitterwithfragments.TweetsActivity" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_profile_view"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="onProfileViewPressed" 
+        android:title="@string/profile_view"/>
+    
+    <item
+        android:id="@+id/action_compose_new"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:onClick="onComposeNewPressed" 

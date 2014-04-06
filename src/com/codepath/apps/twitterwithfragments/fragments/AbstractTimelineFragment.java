@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.codepath.apps.twitterwithfragments.R;
 import com.codepath.apps.twitterwithfragments.TweetsAdapter;
-import com.codepath.apps.twitterwithfragments.models.TweetModel;
+import com.codepath.apps.twitterwithfragments.models.ITweetModel;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ public abstract class AbstractTimelineFragment extends TweetsListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);		
-		List<TweetModel> tweets = new ArrayList<TweetModel>();
+		List<ITweetModel> tweets = new ArrayList<ITweetModel>();
 		adapter = new TweetsAdapter(getActivity(), tweets);
 		ListView lvTweets = (ListView) getActivity().findViewById(R.id.lvTweets);
 		lvTweets.setAdapter(adapter);		

@@ -6,8 +6,9 @@ import org.json.JSONObject;
 import com.codepath.apps.twitterwithfragments.TweetsAdapter;
 import com.codepath.apps.twitterwithfragments.TwitterClient;
 import com.codepath.apps.twitterwithfragments.TwitterClientApp;
-import com.codepath.apps.twitterwithfragments.models.TweetModel;
+import com.codepath.apps.twitterwithfragments.models.HomeTimelineModel;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
+import com.codepath.apps.twitterwithfragments.models.UserTimelineModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.app.Activity;
@@ -28,7 +29,8 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 			public void onSuccess(int statusCode, JSONObject jsonObject) {
 				try {
 					UserModel.save(jsonObject);
-					TweetModel.save(jsonObject);				
+					HomeTimelineModel.save(jsonObject);		
+					UserTimelineModel.save(jsonObject);
 					adapter.refreshTweetsView();		
 					
 					activity.runOnUiThread(new Runnable() {
@@ -48,7 +50,8 @@ public class PostTweetTask extends AsyncTask<Object, Void, Void> {
 			public void onSuccess(int statusCode, JSONArray jsonArray) {
 				try {
 					UserModel.save(jsonArray);
-					TweetModel.save(jsonArray);
+					HomeTimelineModel.save(jsonArray);
+					UserTimelineModel.save(jsonArray);
 					adapter.refreshTweetsView();
 					
 					activity.runOnUiThread(new Runnable() {

@@ -5,15 +5,18 @@
     <string name="action_settings">Settings</string>
     <string name="login_label">Log in</string>
     <string name="title_activity_timeline">Timeline</string>
-    
     <string name="composeTweetHint">In 140 characters or less, tell us what you ate, or link us to pictures of your feet (or tweet something equally useless)</string>
-    <string name="compose_new">New Tweet</string>
-    
+    <string name="compose_new">New</string>
+    <string name="profile_view">Profile</string>
     <string name="tweetImageView">Tweet Image View</string>
     <string name="composeNewTitle">New Tweet</string>
-    
+    <string name="profileName">Name</string>
+    <string name="profileTagline">Tagline</string>
     <string name="maxCharsInitial">140 characters remaining</string>
-    
+    <string name="numFollowersDefaultText">0 Followers</string>
+    <string name="numFollowingDefaultText">0 Following</string>
     <string name="save">Dispatch Twitter Bird</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

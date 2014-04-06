@@ -24,8 +24,8 @@ import com.codepath.apps.twitterwithfragments.TwitterClient;
  * https://github.com/pardom/ActiveAndroid/wiki/Creating-your-database-model
  * 
  */
-@Table(name = "tweets")
-public class TweetModel extends Model implements IUid {
+@Table(name = "home_timeline")
+public class HomeTimelineModel extends Model implements ITweetModel {
 	// Define table fields
 	@Column(name = "body")
 	private String body;
@@ -45,11 +45,11 @@ public class TweetModel extends Model implements IUid {
 	@Column(name = "user")
 	private long userUid;
 	
-	public TweetModel() {
+	public HomeTimelineModel() {
 		super();
 	}
 	
-	public TweetModel(String body, long uid, long createdAt, boolean favorited,
+	public HomeTimelineModel(String body, long uid, long createdAt, boolean favorited,
 			boolean retweeted, long userUid) {
 		super();
 		this.body = body;
@@ -94,8 +94,8 @@ public class TweetModel extends Model implements IUid {
 		return userUid;
 	}
 	
-	public static TweetModel fromJSON(JSONObject jsonObject) throws JSONException {
-		TweetModel model = new TweetModel(
+	public static HomeTimelineModel fromJSON(JSONObject jsonObject) throws JSONException {
+		HomeTimelineModel model = new HomeTimelineModel(
 				jsonObject.getString("text"), 									// body
 				jsonObject.getLong("id"), 										// uid
 				TweetUtils.parseTweetJSONDate(jsonObject.getString("created_at")), 	// uid
@@ -106,13 +106,13 @@ public class TweetModel extends Model implements IUid {
         return model;
 	}
 
-	public static Map<Long, TweetModel> fromJson(JSONArray jsonTweets) {
-		Map<Long, TweetModel> tweets = new HashMap<Long, TweetModel>();
+	public static Map<Long, HomeTimelineModel> fromJson(JSONArray jsonTweets) {
+		Map<Long, HomeTimelineModel> tweets = new HashMap<Long, HomeTimelineModel>();
 		try {
 			int count = jsonTweets.length();
 			for (int i = 0; i < count; i++) {
 				JSONObject jsonTweet = (JSONObject) jsonTweets.get(i);
-				TweetModel tweet = TweetModel.fromJSON(jsonTweet);
+				HomeTimelineModel tweet = HomeTimelineModel.fromJSON(jsonTweet);
 				tweets.put(tweet.getUid(), tweet);					
 			}
 			Log.d("TwitterClient", jsonTweets.toString());					
@@ -123,28 +123,28 @@ public class TweetModel extends Model implements IUid {
 	}
 	
 	// Record Finders
-	public static TweetModel byId(long id) {
-	   return new Select().from(TweetModel.class).where("id = ?", id).executeSingle();
+	public static HomeTimelineModel byId(long id) {
+	   return new Select().from(HomeTimelineModel.class).where("id = ?", id).executeSingle();
 	}
 	
-	public static TweetModel byUid(long uid) {
-	   return new Select().from(TweetModel.class).where("uid = ?", uid).executeSingle();
+	public static HomeTimelineModel byUid(long uid) {
+	   return new Select().from(HomeTimelineModel.class).where("uid = ?", uid).executeSingle();
 	}
 	
 	public static Long maxUid() {
-		TweetModel model = (TweetModel) new Select().from(TweetModel.class).orderBy("uid ASC").executeSingle();
+		HomeTimelineModel model = (HomeTimelineModel) new Select().from(HomeTimelineModel.class).orderBy("uid ASC").executeSingle();
 		if (model != null) {
 			return (model.getUid());			
 		}
 		return null;
 	}
 	
-	public static List<TweetModel> recentItems(Long maxUid, long maxLimit) {
+	public static List<Model> recentItems(Long maxUid, long maxLimit) {
 		if (maxUid != null) {
 			// using leq to be consistent with Twitter max_id behavior
-			return new Select().from(TweetModel.class).where("uid <= ?", maxUid.longValue()).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
+			return new Select().from(HomeTimelineModel.class).where("uid <= ?", maxUid.longValue()).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 		}
-		return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
+		return new Select().from(HomeTimelineModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 	}
 	
 	public static void save(JSONObject jsonObject) {
@@ -154,10 +154,10 @@ public class TweetModel extends Model implements IUid {
 	}
 	
 	public static void save(JSONArray jsonArray) {
-		Map<Long, TweetModel> tweets = TweetModel.fromJson(jsonArray);
+		Map<Long, HomeTimelineModel> tweets = HomeTimelineModel.fromJson(jsonArray);
 		if (tweets != null && !tweets.isEmpty()) {
-			for (TweetModel tweet : tweets.values()) {
-				if (TweetModel.byUid(tweet.getUid()) == null) {
+			for (HomeTimelineModel tweet : tweets.values()) {
+				if (HomeTimelineModel.byUid(tweet.getUid()) == null) {
 					tweet.save();
 					
 				}

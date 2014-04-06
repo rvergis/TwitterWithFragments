@@ -2,7 +2,7 @@ package com.codepath.apps.twitterwithfragments;
 
 import java.util.List;
 
-import com.codepath.apps.twitterwithfragments.models.TweetModel;
+import com.codepath.apps.twitterwithfragments.models.ITweetModel;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
 import com.codepath.apps.twitterwithfragments.tasks.GetHomeTimelineTweetsTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,11 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TweetsAdapter extends ArrayAdapter<TweetModel> {
+public class TweetsAdapter extends ArrayAdapter<ITweetModel> {
 
 	public static long REFRESH_COUNT = 25L;
 
-	public TweetsAdapter(Context context, List<TweetModel> tweets) {
+	public TweetsAdapter(Context context, List<ITweetModel> tweets) {
 		super(context, 0, tweets);
 	}
 	
@@ -33,7 +33,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 			view = inflater.inflate(R.layout.tweet_item, null);
 		}
 		
-		TweetModel tweet = getItem(position);
+		ITweetModel tweet = getItem(position);
 		UserModel user = UserModel.byUid(tweet.getUserUid());
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
@@ -99,7 +99,7 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 		}
 	}
 	
-	public void addTweetsToView(final List<TweetModel> listItems) {	
+	public void addTweetsToView(final List<ITweetModel> listItems) {	
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
