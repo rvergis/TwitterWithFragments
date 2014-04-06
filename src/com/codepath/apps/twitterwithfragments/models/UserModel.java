@@ -24,7 +24,7 @@ import com.codepath.apps.twitterwithfragments.TwitterClient;
  * 
  */
 @Table(name = "users")
-public class UserModel extends Model {
+public class UserModel extends Model implements IUserModel {
 	// Define table fields
 	@Column(name = "name")
 	private String name;
@@ -50,13 +50,16 @@ public class UserModel extends Model {
 	@Column(name = "friendsCount")
 	private int friendsCount;
 	
+	@Column(name = "description")
+	private String description;
+	
 	public UserModel() {
 		super();
 	}
 
 	public UserModel(String name, long uid, String screenName,
 			String profileBgImageUrl, String profileImageUrl, int numTweets, int followersCount,
-			int friendsCount) {
+			int friendsCount, String description) {
 		super();
 		this.name = name;
 		this.uid = uid;
@@ -66,6 +69,7 @@ public class UserModel extends Model {
 		this.numTweets = numTweets;
 		this.followersCount = followersCount;
 		this.friendsCount = friendsCount;
+		this.description = description;
 	}
 
 	
@@ -108,6 +112,10 @@ public class UserModel extends Model {
 		return friendsCount;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
 	// Record Finders
 	public static UserModel byId(long id) {
 	   return new Select().from(UserModel.class).where("id = ?", id).executeSingle();
@@ -130,7 +138,8 @@ public class UserModel extends Model {
 					jsonObject.getString("profile_image_url"), 				// profileImageUrl
 					jsonObject.getInt("statuses_count"), 					// num_tweets
 					jsonObject.getInt("followers_count"), 					// followersCount
-					jsonObject.getInt("friends_count") 						// friendsCount
+					jsonObject.getInt("friends_count"), 					// friendsCount
+					jsonObject.getString("description")						// description
 					);			
         return model;
 	}

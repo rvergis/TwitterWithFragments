@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.codepath.apps.twitterwithfragments.IUserModelAdapter;
 import com.codepath.apps.twitterwithfragments.TwitterClient;
 import com.codepath.apps.twitterwithfragments.TwitterClientApp;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
@@ -27,7 +28,10 @@ public class GetMyInfoTask extends AsyncTask<Object, Void, Void> {
 						@Override
 						public void run() {
 							try  {
-								activity.getActionBar().setTitle("@" + userModel.getScreenName());								
+								activity.getActionBar().setTitle("@" + userModel.getScreenName());
+								if (activity instanceof IUserModelAdapter) {
+									((IUserModelAdapter) activity).adapt(userModel);
+								}
 							} catch(Throwable t) {
 								Log.e(TwitterClient.LOG_NAME, "cannot set title", t);
 							}

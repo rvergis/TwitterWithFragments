@@ -1,12 +1,16 @@
 package com.codepath.apps.twitterwithfragments;
 
+import com.codepath.apps.twitterwithfragments.models.IUserModel;
 import com.codepath.apps.twitterwithfragments.tasks.GetMyInfoTask;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-public class ProfileActivity extends FragmentActivity {
+public class ProfileActivity extends FragmentActivity implements IUserModelAdapter{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,23 @@ public class ProfileActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.profile, menu);
 		return true;
+	}
+
+	@Override
+	public void adapt(IUserModel userModel) {
+		TextView tvName = (TextView) findViewById(R.id.tvName);
+		TextView tvTagline = (TextView) findViewById(R.id.tvTagline);
+		TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
+		TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
+		ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
+		
+		tvName.setText(userModel.getName());
+		tvTagline.setText(userModel.getDescription());
+		tvFollowers.setText(userModel.getFollowersCount() + " Followers");
+		tvFollowing.setText(userModel.getFriendsCount() + " Following");
+		
+		ImageLoader imageLoader = ImageLoader.getInstance();
+		imageLoader.displayImage(userModel.getProfileImageUrl(), ivProfileImage);
 	}
 
 }
