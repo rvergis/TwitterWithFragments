@@ -1,9 +1,10 @@
 package com.codepath.apps.twitterwithfragments;
 
 import com.codepath.apps.twitterwithfragments.models.IUserModel;
-import com.codepath.apps.twitterwithfragments.tasks.GetMyInfoTask;
+import com.codepath.apps.twitterwithfragments.tasks.GetUserInfoTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -16,8 +17,15 @@ public class ProfileActivity extends FragmentActivity implements IUserModelAdapt
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
+		Long userId = null;
+		Intent intent = getIntent();
+		if (intent != null) {
+			if (intent.hasExtra("user_id")) {
+				userId = intent.getLongExtra("user_id", 0L);				
+			}
+		}
 		
-		new GetMyInfoTask().execute(this);
+		new GetUserInfoTask().execute(this, userId);
 	}
 	
 	@Override

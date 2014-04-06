@@ -14,6 +14,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.codepath.apps.twitterwithfragments.TweetUtils;
 import com.codepath.apps.twitterwithfragments.TwitterClient;
@@ -162,5 +163,9 @@ public class UserTimelineModel extends Model implements ITweetModel {
 				}
 			}	
 		}
+	}
+	
+	public static void clear() {
+		new Delete().from(UserTimelineModel.class).execute();
 	}
 }

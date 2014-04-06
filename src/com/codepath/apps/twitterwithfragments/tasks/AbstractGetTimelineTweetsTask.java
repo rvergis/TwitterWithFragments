@@ -22,6 +22,7 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 	@Override
 	protected Void doInBackground(Object... params) {
 		final TweetsAdapter adapter = (TweetsAdapter) params[0];
+		final Long userId = (Long) params[1];
 		Long maxUid = null;
 		if (adapter.getCount() > 0) {
 			ITweetModel model = adapter.getItem(adapter.getCount() - 1);
@@ -36,7 +37,7 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 		if (dbItems != null) {
 			if (dbItems.size() != TweetsAdapter.REFRESH_COUNT) {
 				// invoke the rest service
-				invokeRestService(adapter, maxUid, createRestClientInvoker());
+				invokeRestService(adapter, maxUid, userId, createRestClientInvoker());
 			} else {
 				updateView(adapter, dbItems);
 			}			
@@ -59,11 +60,11 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 		}
 	}
 	
-	private void invokeRestService(final TweetsAdapter adapter, final Long viewMaxUid, final IRestClientInvoker invoker) {
+	private void invokeRestService(final TweetsAdapter adapter, final Long viewMaxUid, Long userId, final IRestClientInvoker invoker) {
 		if (!isLoading()) {
 			setLoading(true);
 			final Long maxUid = ((getMaxUid() == null) ? null : (getMaxUid()));
-			invoker.invoke(maxUid, TweetsAdapter.REFRESH_COUNT, new JsonHttpResponseHandler() {
+			invoker.invoke(maxUid, TweetsAdapter.REFRESH_COUNT, userId, new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(JSONArray jsonTweets) {
 					lock.lock();
@@ -116,7 +117,7 @@ public abstract class AbstractGetTimelineTweetsTask extends AsyncTask<Object, Vo
 	protected abstract IRestClientInvoker createRestClientInvoker();
 	
 	public static interface IRestClientInvoker {
-		public void invoke(Long maxId, long refreshCount, JsonHttpResponseHandler handler);		
+		public void invoke(Long maxId, long refreshCount, Long userId, JsonHttpResponseHandler handler);		
 	}
 	
 }

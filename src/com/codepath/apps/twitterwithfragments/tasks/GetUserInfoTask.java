@@ -12,12 +12,13 @@ import com.codepath.apps.twitterwithfragments.TwitterClientApp;
 import com.codepath.apps.twitterwithfragments.models.UserModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class GetMyInfoTask extends AsyncTask<Object, Void, Void> {
+public class GetUserInfoTask extends AsyncTask<Object, Void, Void> {
 
 	@Override
 	protected Void doInBackground(final Object... params) {
 		final Activity activity = (Activity) params[0];
-		TwitterClientApp.getRestClient().getMyInfo(new JsonHttpResponseHandler() {
+		Long user_id = (Long) params[1];
+		TwitterClientApp.getRestClient().getUserInfo(user_id, new JsonHttpResponseHandler() {
 			
 			@Override
 			public void onSuccess(int statusCode, JSONObject jsonObject) {

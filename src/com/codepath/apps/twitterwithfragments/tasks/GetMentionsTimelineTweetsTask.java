@@ -23,7 +23,7 @@ public class GetMentionsTimelineTweetsTask extends AbstractGetTimelineTweetsTask
 		return new IRestClientInvoker() {
 			
 			@Override
-			public void invoke(Long maxId, long refreshCount,
+			public void invoke(Long maxId, long refreshCount, Long userId,
 					JsonHttpResponseHandler handler) {
 				TwitterClientApp.getRestClient().getMentionsTimeline(maxId, refreshCount, handler);				
 			}

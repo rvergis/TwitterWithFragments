@@ -85,14 +85,14 @@ public class TweetsAdapter extends ArrayAdapter<ITweetModel> {
 		}
 	}
 	
-	public void updateTweetsView(final AsyncTask<Object, Void, Void> asyncTask) {
+	public void updateTweetsView(final AsyncTask<Object, Void, Void> asyncTask, final Long userId) {
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
 			activity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					asyncTask.execute(TweetsAdapter.this);			
+					asyncTask.execute(TweetsAdapter.this, userId);			
 				}
 				
 			});

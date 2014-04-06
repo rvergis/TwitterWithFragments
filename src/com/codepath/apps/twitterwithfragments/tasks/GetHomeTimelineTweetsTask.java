@@ -22,7 +22,7 @@ public class GetHomeTimelineTweetsTask extends AbstractGetTimelineTweetsTask {
 		return new IRestClientInvoker() {
 			
 			@Override
-			public void invoke(Long maxId, long refreshCount,
+			public void invoke(Long maxId, long refreshCount, Long userId,
 					JsonHttpResponseHandler handler) {
 				TwitterClientApp.getRestClient().getHomeTimeline(maxId, refreshCount, handler);
 				
