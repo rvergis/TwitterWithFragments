@@ -22,7 +22,7 @@ The following libraries are used to make this possible:
 
 ### 1. Configure the REST client
 
-Open `src/com.codepath.apps.twitterclient/RestClient.java`. Configure the `REST_API_CLASS`, `REST_URL`, `REST_CONSUMER_KEY`, `REST_CONSUMER_SECRET` based on the values needed to connect to your particular API. The `REST_URL` should be the base URL used for connecting to the API (i.e `https://api.twitter.com`). The `REST_API_CLASS` should be the class defining the [service](https://github.com/fernandezpablo85/scribe-java/tree/master/src/main/java/org/scribe/builder/api) you wish to connect to. Check out the [full list of services](https://github.com/fernandezpablo85/scribe-java/tree/master/src/main/java/org/scribe/builder/api) you can select (i.e `FlickrApi.class`).
+Open `src/com.codepath.apps.twitterwithfragments/RestClient.java`. Configure the `REST_API_CLASS`, `REST_URL`, `REST_CONSUMER_KEY`, `REST_CONSUMER_SECRET` based on the values needed to connect to your particular API. The `REST_URL` should be the base URL used for connecting to the API (i.e `https://api.twitter.com`). The `REST_API_CLASS` should be the class defining the [service](https://github.com/fernandezpablo85/scribe-java/tree/master/src/main/java/org/scribe/builder/api) you wish to connect to. Check out the [full list of services](https://github.com/fernandezpablo85/scribe-java/tree/master/src/main/java/org/scribe/builder/api) you can select (i.e `FlickrApi.class`).
 
 For example if I wanted to connect to Twitter:
 
@@ -117,12 +117,12 @@ Check out [Android Async HTTP Docs](http://loopj.com/android-async-http/) for mo
 
 ### 2. Define the Models
 
-In the `src/com.codepath.apps.twitterclient.models`, create the models that represent the key data to be parsed and persisted within your application.
+In the `src/com.codepath.apps.twitterwithfragments.models`, create the models that represent the key data to be parsed and persisted within your application.
 For example, if you were connecting to Twitter, you would want a Tweet model as follows:
 
 ```java
 // models/Tweet.java
-package com.codepath.apps.twitterclient.models;
+package com.codepath.apps.twitterwithfragments.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -204,7 +204,7 @@ necessary for your mobile client.
 
 ### 3. Setup Your Authenticated Activities
 
-Open `src/com.codepath.apps.twitterclient/LoginActivity.java` and configure the `onLoginSuccess` method
+Open `src/com.codepath.apps.twitterwithfragments/LoginActivity.java` and configure the `onLoginSuccess` method
 which fires once your app has access to the authenticated API. Launch an activity and begin using your REST client:
 
 ```java

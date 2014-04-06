@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterwithfragments;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

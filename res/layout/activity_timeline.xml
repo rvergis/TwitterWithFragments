@@ -2,14 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimelineActivity" >
+    tools:context=".TweetsActivity" >
 
-    <ListView
-        android:id="@+id/lvTweets"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
-   	</ListView>
+    <fragment
+        android:id="@+id/fragmentTweets"
+        android:name="com.codepath.apps.twitterwithfragments.fragments.HomeTimelineFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        tools:layout="@layout/fragment_tweets_list" />
 
 </RelativeLayout>

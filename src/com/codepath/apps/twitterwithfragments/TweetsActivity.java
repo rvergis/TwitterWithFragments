@@ -1,22 +1,16 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterwithfragments;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.codepath.apps.twitterclient.models.TweetModel;
-import com.codepath.apps.twitterclient.tasks.PostTweetTask;
-import com.codepath.apps.twitterclient.tasks.RefreshTweetsTask;
+import com.codepath.apps.twitterwithfragments.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitterwithfragments.tasks.PostTweetTask;
 
-public class TimelineActivity extends Activity {
+public class TweetsActivity extends FragmentActivity {
 
 	private static final int REQUEST_CODE = 1;
 	
@@ -24,29 +18,6 @@ public class TimelineActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-		
-		List<TweetModel> tweets = new ArrayList<TweetModel>();
-		ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
-		TweetsAdapter adapter = new TweetsAdapter(this, tweets);
-		lvTweets.setAdapter(adapter);
-		
-		lvTweets.setOnScrollListener(new AbsListView.OnScrollListener() {
-			
-			static final int THRESHOLD_COUNT = 3;
-			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {				
-				if (firstVisibleItem + visibleItemCount + THRESHOLD_COUNT >= totalItemCount) {
-					new RefreshTweetsTask().execute();						
-				}
-			}
-		});
-		
 	}	
 
 	@Override
@@ -82,6 +53,7 @@ public class TimelineActivity extends Activity {
 	}
 	
 	private void postToTwitter(String tweet) {
-		new PostTweetTask().execute(tweet, this);
+		HomeTimelineFragment fragment = (HomeTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentTweets);
+		new PostTweetTask().execute(tweet, this, fragment.getAdapter());
 	}
 }

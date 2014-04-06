@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterclient.models;
+package com.codepath.apps.twitterwithfragments.models;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +15,8 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.codepath.apps.twitterclient.TweetUtils;
-import com.codepath.apps.twitterclient.TwitterClient;
+import com.codepath.apps.twitterwithfragments.TweetUtils;
+import com.codepath.apps.twitterwithfragments.TwitterClient;
 
 /*
  * This is a temporary, sample model that demonstrates the basic structure
@@ -134,14 +134,15 @@ public class TweetModel extends Model implements IUid {
 	public static Long maxUid() {
 		TweetModel model = (TweetModel) new Select().from(TweetModel.class).orderBy("uid ASC").executeSingle();
 		if (model != null) {
-			return (model.getUid() - 1L);			
+			return (model.getUid());			
 		}
 		return null;
 	}
 	
 	public static List<TweetModel> recentItems(Long maxUid, long maxLimit) {
 		if (maxUid != null) {
-			return new Select().from(TweetModel.class).where("uid < ?", maxUid.longValue()).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
+			// using leq to be consistent with Twitter max_id behavior
+			return new Select().from(TweetModel.class).where("uid <= ?", maxUid.longValue()).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 		}
 		return new Select().from(TweetModel.class).orderBy("createdAt DESC").limit(Long.toString(maxLimit)).execute();
 	}

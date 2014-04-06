@@ -1,10 +1,10 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterwithfragments;
 
 import java.util.List;
 
-import com.codepath.apps.twitterclient.models.TweetModel;
-import com.codepath.apps.twitterclient.models.UserModel;
-import com.codepath.apps.twitterclient.tasks.RefreshTweetsTask;
+import com.codepath.apps.twitterwithfragments.models.TweetModel;
+import com.codepath.apps.twitterwithfragments.models.UserModel;
+import com.codepath.apps.twitterwithfragments.tasks.GetHomelineTweetsTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.Activity;
@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TweetsAdapter extends ArrayAdapter<TweetModel> {
+
+	public static long REFRESH_COUNT = 25L;
 
 	public static TweetsAdapter instance = null; 
 	
@@ -67,21 +69,36 @@ public class TweetsAdapter extends ArrayAdapter<TweetModel> {
 				@Override
 				public void run() {
 					clear();
+					notifyDataSetChanged();
 				}
 				
 			});
 		}
 	}
 	
-	public void updateView(final Long maxUid) {	
+	public void refreshView() {
 		Context context = getContext();
 		if (context instanceof Activity) {
 			Activity activity = (Activity) getContext();
 			activity.runOnUiThread(new Runnable() {
-
 				@Override
 				public void run() {
-					addAll(TweetModel.recentItems(maxUid, RefreshTweetsTask.REFRESH_COUNT));
+					clear();
+					new GetHomelineTweetsTask().execute(TweetsAdapter.this);			
+				}
+				
+			});
+		}
+	}
+	
+	public void updateView(final List<TweetModel> listItems) {	
+		Context context = getContext();
+		if (context instanceof Activity) {
+			Activity activity = (Activity) getContext();
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					addAll(listItems);
 					notifyDataSetChanged();			
 				}
 				

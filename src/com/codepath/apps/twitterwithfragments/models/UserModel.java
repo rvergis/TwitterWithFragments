@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterclient.models;
+package com.codepath.apps.twitterwithfragments.models;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.query.Select;
-import com.codepath.apps.twitterclient.TwitterClient;
+import com.codepath.apps.twitterwithfragments.TwitterClient;
 
 /*
  * This is a temporary, sample model that demonstrates the basic structure
